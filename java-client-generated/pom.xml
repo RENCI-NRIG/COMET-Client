@@ -4,13 +4,17 @@
   <artifactId>swagger-java-client</artifactId>
   <packaging>jar</packaging>
   <name>swagger-java-client</name>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
   <url>https://github.com/RENCI-NRIG/COMET-Client</url>
   <description>Swagger Java Comet Client</description>
+  <issueManagement>
+		<system>Swagger Java Comet Client Github</system>
+		<url>https://github.com/RENCI-NRIG/COMET-Client/issues</url>
+	</issueManagement>
   <scm>
     <connection>scm:git:git@github.com:RENCI-NRIG/COMET-Client.git</connection>
     <url>https://github.com/RENCI-NRIG/COMET-Client</url>
-    <tag>swagger-java-client-1.0.0</tag>
+    <tag>master</tag>
   </scm>
   <prerequisites>
     <maven>2.2.0</maven>
