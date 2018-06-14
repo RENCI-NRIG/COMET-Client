@@ -22,8 +22,8 @@ Delete scope within a context.   - Operation requires write access
 ### Example
 ```java
 // Import classes:
-//import io.swagger.client.ApiException;
-//import io.swagger.client.api.DefaultApi;
+//import org.renci.io.swagger.client.ApiException;
+//import org.renci.io.swagger.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();
@@ -75,8 +75,8 @@ Retrieve a list of existing scopes within a given context.   - Operation require
 ### Example
 ```java
 // Import classes:
-//import io.swagger.client.ApiException;
-//import io.swagger.client.api.DefaultApi;
+//import org.renci.io.swagger.client.ApiException;
+//import org.renci.io.swagger.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();
@@ -124,8 +124,8 @@ Retrieve the current Comet version and Comet API version.
 ### Example
 ```java
 // Import classes:
-//import io.swagger.client.ApiException;
-//import io.swagger.client.api.DefaultApi;
+//import org.renci.io.swagger.client.ApiException;
+//import org.renci.io.swagger.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();
@@ -165,8 +165,8 @@ Retrieve a value from a named scope within a context.  - Operation requires read
 ### Example
 ```java
 // Import classes:
-//import io.swagger.client.ApiException;
-//import io.swagger.client.api.DefaultApi;
+//import org.renci.io.swagger.client.ApiException;
+//import org.renci.io.swagger.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();
@@ -216,8 +216,8 @@ Create or modify a named scope for slice/sliver within a context, with visibilit
 ### Example
 ```java
 // Import classes:
-//import io.swagger.client.ApiException;
-//import io.swagger.client.api.DefaultApi;
+//import org.renci.io.swagger.client.ApiException;
+//import org.renci.io.swagger.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();

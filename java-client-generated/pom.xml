@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>io.swagger</groupId>
-  <artifactId>swagger-java-client</artifactId>
+  <groupId>org.renci.io.swagger</groupId>
+  <artifactId>swagger-java-comet-client</artifactId>
   <packaging>jar</packaging>
-  <name>swagger-java-client</name>
+  <name>swagger-java-comet-client</name>
   <version>1.0.1-SNAPSHOT</version>
   <url>https://github.com/RENCI-NRIG/COMET-Client</url>
   <description>Swagger Java Comet Client</description>
