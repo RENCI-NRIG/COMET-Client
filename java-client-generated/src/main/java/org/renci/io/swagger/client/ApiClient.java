@@ -159,7 +159,9 @@ public class ApiClient {
      */
     public ApiClient setVerifyingSsl(boolean verifyingSsl) {
         this.verifyingSsl = verifyingSsl;
-        applySslSettings();
+        // Commented by kthare10 as a workaround for open swagger issue
+        // [JAVA]sslCaCert InputStream is getting exhausted when loading SSLCerts in ApiClient.java/apiclient.mustache #7719
+        //applySslSettings();
         return this;
     }
 
@@ -181,7 +183,9 @@ public class ApiClient {
      */
     public ApiClient setSslCaCert(InputStream sslCaCert) {
         this.sslCaCert = sslCaCert;
-        applySslSettings();
+        // Commented by kthare10 as a workaround for open swagger issue
+        // [JAVA]sslCaCert InputStream is getting exhausted when loading SSLCerts in ApiClient.java/apiclient.mustache #7719
+        //applySslSettings();
         return this;
     }
 
@@ -198,7 +202,9 @@ public class ApiClient {
      */
     public ApiClient setKeyManagers(KeyManager[] managers) {
         this.keyManagers = managers;
-        applySslSettings();
+        // Commented by kthare10 as a workaround for open swagger issue
+        // [JAVA]sslCaCert InputStream is getting exhausted when loading SSLCerts in ApiClient.java/apiclient.mustache #7719
+        //applySslSettings();
         return this;
     }
 
@@ -1129,8 +1135,11 @@ public class ApiClient {
     /**
      * Apply SSL related settings to httpClient according to the current values of
      * verifyingSsl and sslCaCert.
+     * Changed scope from private to public as a workaround for open swagger issue by kthare10
+     * [JAVA]sslCaCert InputStream is getting exhausted when loading SSLCerts in ApiClient.java/apiclient.mustache #7719
+     *
      */
-    private void applySslSettings() {
+    public void applySslSettings() {
         try {
             TrustManager[] trustManagers = null;
             HostnameVerifier hostnameVerifier = null;
@@ -1166,10 +1175,12 @@ public class ApiClient {
                 trustManagerFactory.init(caKeyStore);
                 trustManagers = trustManagerFactory.getTrustManagers();
                 // This has been added manually to allow IP address to be used instead of hostnames
+                // Added by kthare10 
                 hostnameVerifier = new HostnameVerifier() {
                      @Override
                      public boolean verify(String hostname, SSLSession session) { return true; }
                  };
+                // Added by kthare10 
             }
 
             if (keyManagers != null || trustManagers != null) {

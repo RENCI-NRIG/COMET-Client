@@ -100,39 +100,59 @@ public class DefaultApiTest {
      */
     @Test
     public void readScopeGetTest() throws ApiException {
-            	try {
+        try {
+            apiClient.setBasePath("https://13.58.134.113:8111/");
+            InputStream sslCaCert = new FileInputStream("/Users/komalthareja/comet/inno-hn_exogeni_net/DigiCertCA.der");
+            apiClient.setSslCaCert(sslCaCert);
+            KeyStore ks = KeyStore.getInstance("JKS");
+            InputStream sslClientCert = new FileInputStream("/Users/komalthareja/comet/inno-hn_exogeni_net/client.jks");
+            String ksPwd = "changeme";
+            ks.load(sslClientCert, ksPwd.toCharArray());
+            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+            keyManagerFactory.init(ks, ksPwd.toCharArray());
+            apiClient.setKeyManagers(keyManagerFactory.getKeyManagers());
+            apiClient.applySslSettings();
 
-	    	apiClient.setBasePath("https://13.58.134.113:8111/");
-	    	//InputStream sslCaCert = new FileInputStream("/Users/komalthareja/comet/cometclient.jks");
-	    	InputStream sslCaCert = new FileInputStream("/Users/komalthareja/comet/certs.der");
-	    	//InputStream sslCaCert = new FileInputStream("/Users/komalthareja/.ssh/geni-kthare10.der");
-	    	apiClient.setSslCaCert(sslCaCert);
+            String contextID = "39876c7b-f31b-43f3-b4d2-3ff0fb948cbd";
+            String family = "interfaces";
+            String key = "b55acc64-b376-4a9a-bc3f-70bdae153982";
+            String readToken = "80136948-f599-4f31-9d77-50864e02d7dc";
+            CometResponse response = api.readScopeGet(contextID, family, key, readToken);
+            if (!response.getStatus().equals("OK")) {
+                System.out.println("READSCOPE Status: " + response.getStatus() + "Message: " + response.getMessage());
+                return;
+            }
+            String val = response.getValue().toString();
+            System.out.println("READSCOPE RES: " + val);
 
-	        String contextID = "47b7dc35-3557-495a-9d73-40d50c7803db";
-	        String family = "interfaces";
-	        String key = "6729c69f-d9ff-4223-b52a-b6cda9bfcbef";
-	        String readToken = "6729c69f-d9ff-4223-b52a-b6cda9bfcbef-rid";
-	        CometResponse response = api.readScopeGet(contextID, family, key, readToken);
-	        if (!response.getStatus().equals("OK")) {
-	            System.out.println("READSCOPE Status: " + response.getStatus() + "Message: " + response.getMessage());
-	            return;
-	        }
-	        String val = response.getValue().toString();
-	        System.out.println("READSCOPE RES: " + val);
-	        if(!val.isEmpty()) {
-	        	String [] arrOfStr = val.split("=");
-	        	if(arrOfStr.length < 2) {
-	        		System.out.println("Incorrect response");
-	        	}
-	        	val = arrOfStr[1].substring(0, arrOfStr[1].length()-1);
-	        	System.out.println("DEBUG1 : " + val);
-	        	JSONObject o = (JSONObject)JSONValue.parse(val);
-	        	System.out.println("DEBUG2 Val is array " + o.get("val_").toString());
-	        	JSONArray a = (JSONArray)JSONValue.parse(o.get("val_").toString());
-	        	System.out.println("DEBUG3 Val is array " + a.toString());
-	        }
+            com.google.gson.internal.LinkedTreeMap o1 = (com.google.gson.internal.LinkedTreeMap) response.getValue();
+            if( o1 != null) {
+                if(o1.containsKey("value")) {
+                    System.out.println("NEucaCometInterface::read: value=" + o1.get("value"));
+                    JSONObject o2 = (JSONObject)JSONValue.parse(o1.get("value").toString());
+                    if(o2 != null) {
+                        if(o2.containsKey("val_")) {
+                            System.out.println("NEucaCometInterface::read: val_=" + o2.get("val_"));
+                            JSONArray a = (JSONArray)JSONValue.parse(o2.get("val_").toString());
+                            System.out.println("Result: " + a.toString() + " size: " + a.size());
+                        }
+                        else {
+                            System.out.println("NEucaCometInterface::read: Unable to get JSONArray val_");
+                        }
+                    }
+                    else {
+                        System.out.println("NEucaCometInterface::read: Unable to get JSONObject value");
+                    }
+                }
+                else {
+                    System.out.println("NEucaCometInterface::read: CometResponse does not contain value");
+                }
+            }
+            else {
+                System.out.println("NEucaCometInterface::read: unable to load json object from CometResponse");
+            }
 
-    	}
+        }
     	catch(ApiException e) {
     		System.out.println("ApiException occured while READSCOPE: " + e.getMessage());
     		e.printStackTrace();
