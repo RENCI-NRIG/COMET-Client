@@ -10,6 +10,8 @@ import org.junit.Ignore;
 import org.json.simple.*;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.security.KeyStore;
+import javax.net.ssl.KeyManagerFactory;
 
 class CometValue extends Value {
     CometValue(String v) {
