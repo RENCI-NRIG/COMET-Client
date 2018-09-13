@@ -3,7 +3,10 @@ Python based Comet client to invoke various supported Comet REST commands.
 
 # Installation
 `git clone https://github.com/RENCI-NRIG/COMET-Client.git`
+
 `cd COMET-Client/python-client/`
+
+You are now ready execute python client.
 
 Pre-requisites: requires python 2.7 or above version and python requests package installed
 
