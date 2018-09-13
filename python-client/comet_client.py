@@ -162,7 +162,7 @@ def get_family (args):
         comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
         response=comet.get_family(args.comethost, args.contextid, args.key, args.readtoken, args.family)
         print ("get_family: Received Response Status Code=" + str(response.status_code))
-        if response.status_code == 200 :
+        if response.json() :
             print("get_family: Received Response Message: " + response.json()["message"])
             print("get_family: Received Response Status: " + response.json()["status"])
             print("get_family: Received Response Value: " + json.dumps((response.json()["value"])))
@@ -174,7 +174,7 @@ def create_update_family(args):
         comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
         response=comet.update_family(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken, args.family, args.value)
         print ("create_update_family: Received Response Status Code=" + str(response.status_code))
-        if response.status_code == 200 :
+        if response.json() :
             print("create_update_family: Received Response Message: " + response.json()["message"])
             print("create_update_family: Received Response Status: " + response.json()["status"])
             print("create_update_family: Received Response Value: " + json.dumps((response.json()["value"])))
@@ -186,7 +186,7 @@ def delete_family(args):
         comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
         response=comet.delete_family(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken, args.family)
         print ("delete_family: Received Response Status Code=" + str(response.status_code))
-        if response.status_code == 200 :
+        if response.json() :
             print("delete_family: Received Response Message: " + response.json()["message"])
             print("delete_family: Received Response Status: " + response.json()["status"])
             print("delete_family: Received Response Value: " + json.dumps((response.json()["value"])))
@@ -198,7 +198,7 @@ def enumerate_families(args):
         comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
         response=comet.enumerate_families(args.comethost, args.contextid, args.readtoken, args.family)
         print ("enumerate_families: Received Response Status Code=" + str(response.status_code))
-        if response.status_code == 200 :
+        if response.json() :
             print("enumerate_families: Received Response Message: " + response.json()["message"])
             print("enumerate_families: Received Response Status: " + response.json()["status"])
             print("enumerate_families: Received Response Value: " + json.dumps((response.json()["value"])))
@@ -210,7 +210,7 @@ def delete_families(args):
         comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
         response=comet.delete_families(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken)
         print ("delete_families: Received Response Status Code=" + str(response.status_code))
-        if response.status_code == 200 :
+        if response.json() :
             print("delete_families: Received Response Message: " + response.json()["message"])
             print("delete_families: Received Response Status: " + response.json()["status"])
             print("delete_families: Received Response Value: " + json.dumps((response.json()["value"])))
