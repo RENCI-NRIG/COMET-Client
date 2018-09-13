@@ -28,7 +28,7 @@ def main():
         '--operation',
         dest='operation',
         type = str,
-        help='Operation get_family|create_family|update_family|delete_family|enumerate_families|delete_families',
+        help='Operation allowed values: get_family|create_family|update_family|delete_family|enumerate_families|delete_families',
         required=True
     )
     parser.add_argument(
@@ -36,7 +36,7 @@ def main():
         '--comethost',
         dest='comethost',
         type = str,
-        help='Comet Host',
+        help='Comet Host e.g. https://13.59.255.221:8111/',
         required=True
     )
 
@@ -45,7 +45,7 @@ def main():
         '--contextid',
         dest='contextid',
         type = str,
-        help='Context Id',
+        help='Context Id e.g. guid',
         required=True
     )
     parser.add_argument(
@@ -53,7 +53,7 @@ def main():
         '--readtoken',
         dest='readtoken',
         type = str,
-        help='Read Token',
+        help='Read Token; alphanumeric string with atleast 8 characters',
         required=True
     )
     parser.add_argument(
@@ -61,35 +61,35 @@ def main():
         '--writetoken',
         dest='writetoken',
         type = str,
-        help='Write Token, required for [create_family, update_family, delete_family, delete_families]'
+        help='Write Token; alphanumeric string with atleast 8 characters; Required for create_family|update_family| delete_family|delete_families'
     )
     parser.add_argument(
         '-f',
         '--family',
         dest='family',
         type = str,
-        help='Family, optional for [enumerate_families]'
+        help='Family; Optional for enumerate_families'
     )
     parser.add_argument(
         '-k',
         '--key',
         dest='key',
         type = str,
-        help='Key, required for [get_family, create_family, update_family, delete_family, delete_families]'
+        help='Key; Required for get_family|create_family|update_family|delete_family|delete_families'
     )
     parser.add_argument(
         '-v',
         '--value',
         dest='value',
         type = str,
-        help='Value, required for [create_family, update_family]'
+        help='Value; Required for create_family|update_family'
     )
     parser.add_argument(
         '-a',
         '--cacert',
         dest='cacert',
         type = str,
-        help='CA Certificate, required for operation=create_family'
+        help='CA Certificate; Required for create_family'
     )
 
     parser.add_argument(
@@ -97,7 +97,7 @@ def main():
         '--clientcert',
         dest='clientcert',
         type = str,
-        help='Client Certificate, required for operation=create_family'
+        help='Client Certificate; Required for create_family'
     )
 
     parser.add_argument(
@@ -105,7 +105,7 @@ def main():
         '--clientkey',
         dest='clientkey',
         type = str,
-        help='Client Key, required for operation=create_family'
+        help='Client Key; Required for create_family'
     )
 
     args = parser.parse_args()
@@ -173,11 +173,11 @@ def create_update_family(args):
     try:
         comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
         response=comet.update_family(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken, args.family, args.value)
-        print ("update_family: Received Response Status Code=" + str(response.status_code))
+        print ("create_update_family: Received Response Status Code=" + str(response.status_code))
         if response.status_code == 200 :
-            print("update_family: Received Response Message: " + response.json()["message"])
-            print("update_family: Received Response Status: " + response.json()["status"])
-            print("update_family: Received Response Value: " + json.dumps((response.json()["value"])))
+            print("create_update_family: Received Response Message: " + response.json()["message"])
+            print("create_update_family: Received Response Status: " + response.json()["status"])
+            print("create_update_family: Received Response Value: " + json.dumps((response.json()["value"])))
     except Exception as e:
         print("Exception occurred: " + str(type(e)) + " : " + str(e) + "\n")
 
