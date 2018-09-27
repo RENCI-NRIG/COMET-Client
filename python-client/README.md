@@ -27,6 +27,8 @@ optional arguments:
 # Input File
 Input File is a json following containing following parameters:
 ## Input file for creating pubkeys context
+[input1.json](./input1.json)
+
 User is expected to update the values as needed.
 ```
 {
@@ -43,6 +45,8 @@ User is expected to update the values as needed.
 ```
 
 ## Input file for creating hostsall context
+[input2.json](./input2.json)
+
 User is expected to update the values as needed.
 ```
 {
@@ -66,14 +70,14 @@ User is expected to update the values as needed.
 `python3 comet_client.py -o update_family -c https://13.59.255.221:8111  -i ./input1.json`
 
 ## Get a context
-`python3 comet_client.py -o get_family -c https://13.59.255.221:8111  -i ./input.json`
+`python3 comet_client.py -o get_family -c https://13.59.255.221:8111  -i ./input1.json`
 
 ## Delete a context
-`python3 comet_client.py -o delete_family -c https://13.59.255.221:8111  -i ./input.json`
+`python3 comet_client.py -o delete_family -c https://13.59.255.221:8111  -i ./input1.json`
 
 ## Enumerate a context
-`python3 comet_client.py -o enumerate_families -c https://13.59.255.221:8111  -i ./input.json`
+`python3 comet_client.py -o enumerate_families -c https://13.59.255.221:8111  -i ./input1.json`
 
 ## Delete all families of a context
-`python3 comet_client.py -o delete_families -c https://13.59.255.221:8111  -i ./input.json`
+`python3 comet_client.py -o delete_families -c https://13.59.255.221:8111  -i ./input1.json`
 
