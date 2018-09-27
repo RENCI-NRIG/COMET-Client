@@ -18,6 +18,7 @@ import os
 import time
 import json
 import argparse
+import subprocess
 
 from comet_common_iface import *
 
@@ -32,135 +33,62 @@ def main():
         required=True
     )
     parser.add_argument(
-        '-t',
+        '-c',
         '--comethost',
         dest='comethost',
         type = str,
         help='Comet Host e.g. https://13.59.255.221:8111/',
         required=True
     )
-
     parser.add_argument(
         '-i',
-        '--contextid',
-        dest='contextid',
+        '--inputFile',
+        dest='inputFile',
         type = str,
-        help='Context Id e.g. guid',
+        help='Input File',
         required=True
-    )
-    parser.add_argument(
-        '-r',
-        '--readtoken',
-        dest='readtoken',
-        type = str,
-        help='Read Token; alphanumeric string with atleast 8 characters',
-        required=True
-    )
-    parser.add_argument(
-        '-w',
-        '--writetoken',
-        dest='writetoken',
-        type = str,
-        help='Write Token; alphanumeric string with atleast 8 characters; Required for create_family|update_family| delete_family|delete_families'
-    )
-    parser.add_argument(
-        '-f',
-        '--family',
-        dest='family',
-        type = str,
-        help='Family; Optional for enumerate_families'
-    )
-    parser.add_argument(
-        '-k',
-        '--key',
-        dest='key',
-        type = str,
-        help='Key; Required for get_family|create_family|update_family|delete_family|delete_families'
-    )
-    parser.add_argument(
-        '-v',
-        '--value',
-        dest='value',
-        type = str,
-        help='Value; Required for create_family|update_family'
-    )
-    parser.add_argument(
-        '-a',
-        '--cacert',
-        dest='cacert',
-        type = str,
-        help='CA Certificate; Required for create_family'
-    )
-
-    parser.add_argument(
-        '-c',
-        '--clientcert',
-        dest='clientcert',
-        type = str,
-        help='Client Certificate; Required for create_family'
-    )
-
-    parser.add_argument(
-        '-p',
-        '--clientkey',
-        dest='clientkey',
-        type = str,
-        help='Client Key; Required for create_family'
     )
 
     args = parser.parse_args()
 
-    if args.operation != 'enumerate_families' and args.operation != 'delete_families' and args.family is None:
-        print("Family is required for all operations except enumerate_families and delete_families")
-        parser.print_help()
-        sys.exit(1)
+    inputJsonTxt = open(args.inputFile).read()
+    inputJson = json.loads(inputJsonTxt)
 
-    if args.operation != 'enumerate_families' and args.operation != 'delete_families' and args.key is None:
-        print("Key is required for all operations except enumerate_families and delete_families")
-        parser.print_help()
-        sys.exit(1)
-
-    if args.operation != 'create_family' and args.operation != 'update_family' and args.value is not None:
-        print("Value is required only for operations create_family and update_family")
-        parser.print_help()
-        sys.exit(1)
-
-    if (args.operation == 'create_family' or args.operation == 'update_family') and args.value is None:
-        print("Value and Write Token is required for operations create_family and update_family")
-        parser.print_help()
-        sys.exit(1)
-
-    if args.operation != 'enumerate_families' and args.operation != 'get_family' and args.writetoken is None:
-        print("Write token is required for all operations except enumerate_families and get_family")
+    if inputJson["contextId"] is None:
+        print("Missing required field: contextId")
         parser.print_help()
         sys.exit(1)
 
     if args.operation == 'get_family':
-        get_family(args)
+        get_family(args, inputJson)
     elif args.operation == 'create_family':
-        if args.cacert is None or args.clientcert is None or args.clientkey is None:
+        if inputJson["caCert"] is None or inputJson["cert"] is None or inputJson["certKey"] is None:
             print("CA Cert, Client Cert and Client Key is required for create_family")
             parser.print_help()
             sys.exit(1)
-        create_update_family(args)
+        create_update_family(args, inputJson)
     elif args.operation == 'update_family':
-        create_update_family(args)
+        create_update_family(args, inputJson)
     elif args.operation == 'delete_family':
-        delete_family(args)
+        if inputJson["caCert"] is None or inputJson["cert"] is None or inputJson["certKey"] is None:
+            print("CA Cert, Client Cert and Client Key is required for delete_family")
+            parser.print_help()
+            sys.exit(1)
+        delete_family(args, inputJson)
     elif args.operation == 'enumerate_families':
-        enumerate_families(args)
+        enumerate_families(args, inputJson)
     elif args.operation == 'delete_families':
-        delete_families(args)
+        delete_families(args, inputJson)
     else:
         parser.print_help()
         sys.exit(1)
 
     sys.exit(0)
 
-def get_family (args):
+def get_family (args, inputJson):
     try:
-        comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
-        response=comet.get_family(args.comethost, args.contextid, args.key, args.readtoken, args.family)
+        comet=CometInterface(args.comethost, inputJson["caCert"], inputJson["cert"], inputJson["certKey"])
+        response=comet.get_family(args.comethost, inputJson["contextId"], inputJson["key"], inputJson["readToken"], inputJson["family"])
         print ("get_family: Received Response Status Code=" + str(response.status_code))
         if response.json() :
             print("get_family: Received Response Message: " + response.json()["message"])
@@ -169,10 +97,11 @@ def get_family (args):
     except Exception as e:
         print("Exception occurred: " + str(type(e)) + " : " + str(e) + "\n")
 
-def create_update_family(args):
+def create_update_family(args, inputJson):
     try:
-        comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
-        response=comet.update_family(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken, args.family, args.value)
+        comet=CometInterface(args.comethost, None, inputJson["cert"], inputJson["certKey"], None)
+        response=comet.update_family(args.comethost, inputJson["contextId"], inputJson["key"],
+                                     inputJson["readToken"], inputJson["writeToken"], inputJson["family"], inputJson["value"])
         print ("create_update_family: Received Response Status Code=" + str(response.status_code))
         if response.json() :
             print("create_update_family: Received Response Message: " + response.json()["message"])
@@ -181,10 +110,10 @@ def create_update_family(args):
     except Exception as e:
         print("Exception occurred: " + str(type(e)) + " : " + str(e) + "\n")
 
-def delete_family(args):
+def delete_family(args, inputJson):
     try:
-        comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
-        response=comet.delete_family(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken, args.family)
+        comet=CometInterface(args.comethost, inputJson["caCert"], inputJson["cert"], inputJson["certKey"], None)
+        response=comet.delete_family(args.comethost, inputJson["contextId"], inputJson["key"],inputJson["readToken"], inputJson["writeToken"], inputJson["family"])
         print ("delete_family: Received Response Status Code=" + str(response.status_code))
         if response.json() :
             print("delete_family: Received Response Message: " + response.json()["message"])
@@ -193,10 +122,10 @@ def delete_family(args):
     except Exception as e:
         print("Exception occurred: " + str(type(e)) + " : " + str(e) + "\n")
 
-def enumerate_families(args):
+def enumerate_families(args, inputJson):
     try:
-        comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
-        response=comet.enumerate_families(args.comethost, args.contextid, args.readtoken, args.family)
+        comet=CometInterface(args.comethost, inputJson["caCert"], inputJson["cert"], inputJson["certKey"])
+        response=comet.enumerate_families(args.comethost, inputJson["contextId"], inputJson["readToken"], inputJson["family"])
         print ("enumerate_families: Received Response Status Code=" + str(response.status_code))
         if response.json() :
             print("enumerate_families: Received Response Message: " + response.json()["message"])
@@ -205,10 +134,10 @@ def enumerate_families(args):
     except Exception as e:
         print("Exception occurred: " + str(type(e)) + " : " + str(e) + "\n")
 
-def delete_families(args):
+def delete_families(args, inputJson):
     try:
-        comet=CometInterface(args.comethost, args.cacert, args.clientcert, args.clientkey, None)
-        response=comet.delete_families(args.comethost, args.contextid, args.key, args.readtoken, args.writetoken)
+        comet=CometInterface(args.comethost, inputJson["caCert"], inputJson["cert"], inputJson["certKey"])
+        response=comet.delete_families(args.comethost, inputJson["contextId"], inputJson["key"], inputJson["readToken"], inputJson["writeToken"])
         print ("delete_families: Received Response Status Code=" + str(response.status_code))
         if response.json() :
             print("delete_families: Received Response Message: " + response.json()["message"])

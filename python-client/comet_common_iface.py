@@ -96,10 +96,7 @@ class CometInterface:
             'readToken':readToken,
             'writeToken':writeToken
         }
-        if self._verify == False:
-            response = requests.post((host +'/writeScope'), headers=self._headers(), params=params, verify=False, json=value)
-        else:
-            response = requests.post((host +'/writeScope'), headers=self._headers(), params=params, cert= self._cert, verify=self._verify, json=value)
+        response = requests.post((host +'/writeScope'), headers=self._headers(), params=params, cert= self._cert, verify=self._verify, json=value)
         self._log.debug ("update_family: Received Response Status Code: " + str(response.status_code))
         if response.status_code == 200 :
             self._log.debug ("update_family: Received Response Message: " + response.json()["message"])
