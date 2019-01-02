@@ -29,7 +29,7 @@ class CometException(Exception):
 
 class CometInterface:
     @classmethod
-    def __init__(self, cometHost, caCert, clientCert, clientKey, log):
+    def __init__(self, cometHost, caCert, clientCert, clientKey, log=None):
         self._cometHost = cometHost.split(",")
         self.stdout_path = '/dev/null'
         self._log = log
