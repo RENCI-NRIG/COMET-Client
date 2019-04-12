@@ -37,10 +37,9 @@ class CometInterface:
             self._log = logging.getLogger('')
         if caCert != None:
             self._verify = caCert
-            self._cert = (clientCert, clientKey)
         else :
             self._verify = False
-            self._cert = None
+        self._cert = (clientCert, clientKey)
 
     @classmethod
     def _headers(self):

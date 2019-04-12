@@ -5,8 +5,8 @@
     "family":"hostsall",
     "key":"1112-3f23-4a5a-9b9e-33f98884570b",
     "value":{"val_":"[{\"hostName\":\"kthare10-server2-yrhoumuhz2ni.novalocal\",\"ip\":\"\"}]"},
-    "caCert":"/Users/komalthareja/comet/DigiCertCA.crt",
-    "cert":"/Users/komalthareja/comet/inno-hn_exogeni_net.pem",
-    "certKey":"/Users/komalthareja/comet/inno-hn_exogeni_net.key"
+    "caCert":"/Users/komalthareja/renci/comet/DigiCertCA.crt",
+    "cert":"/Users/komalthareja/renci/comet/inno-hn_exogeni_net.pem",
+    "certKey":"/Users/komalthareja/renci/comet/inno-hn_exogeni_net.key"
 }
 
