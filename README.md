@@ -1,4 +1,4 @@
-# swagger-java-comet-client
+# comet-client
 
 ## Requirements
 
